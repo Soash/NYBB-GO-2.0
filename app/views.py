@@ -94,9 +94,10 @@ def quiz4(request):
                     team.save()
                     return redirect(quiz5)
         
-        team = request.user.team
-        team.score -= 10
-        team.save()
+        if request.user.team.quiz_4_status == False:
+            team = request.user.team
+            team.score -= 10
+            team.save()
         return render(request, 'quiz4.html')
     
     return redirect('quiz3')
