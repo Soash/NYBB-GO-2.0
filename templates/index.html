@@ -36,7 +36,7 @@
             <span>Score: {{request.user.team.score}}</span>
         </div>
         <div style="display: flex;justify-content: center;">
-            <div>{{request.user.team.log|safe}}</div>
+            <div style="font-size: 0.9rem;">{{request.user.team.log|safe}}</div>
         </div>
         <div class="status">
             {% if request.user.team.quiz_1_status == True %}
