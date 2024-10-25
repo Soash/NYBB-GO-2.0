@@ -88,14 +88,14 @@ def quiz4(request):
                 if hasattr(request.user, 'team'):
                     team = request.user.team
                     if team.quiz_4_status == False:
-                        team.score += 105
+                        team.score += 110
                     team.quiz_4_status = True
                     team.log += f"Quiz 4 Solved at UTC {timezone.now().strftime('%Y-%m-%d %H:%M:%S')}<br>"
                     team.save()
                     return redirect(quiz5)
                 
         team = request.user.team
-        team.score -= 5
+        team.score -= 10
         team.save()
         return render(request, 'quiz4.html')
     
