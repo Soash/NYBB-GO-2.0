@@ -81,7 +81,7 @@ def quiz3(request):
 
 @login_required
 def quiz4(request):
-    if request.user.team.quiz_3_status == True:
+    if request.user.team.quiz_3_status == True:           
         if request.method == 'POST':
             submitted_code = request.POST.get('UnlockKey')
             if submitted_code == '1953':
@@ -93,7 +93,7 @@ def quiz4(request):
                     team.log += f"Quiz 4 Solved at UTC {timezone.now().strftime('%Y-%m-%d %H:%M:%S')}<br>"
                     team.save()
                     return redirect(quiz5)
-                
+        
         team = request.user.team
         team.score -= 10
         team.save()
@@ -154,27 +154,19 @@ def congrats(request):
         return render(request, 'congrats.html')
     return redirect('quiz6')
 
-
 @login_required
 def b_ecoli(request):
     return render(request, 'b_ecoli.html')
-
-
-# @login_required
-# def b_lplant(request):
-#     return render(request, 'b_lplant.html')
- 
 
 @login_required
 def update_score(request):
     if request.method == 'POST':
         team = request.user.team
         team.score -= 10
+        print(f"Score deducted by Update Score {timezone.now().strftime('%Y-%m-%d %H:%M:%S')}")
         team.save()
         return JsonResponse({'status': 'success'})
     return redirect('index')
-
-
 
 def signin(request):
     if request.user.is_authenticated:
@@ -221,5 +213,7 @@ def result(request):
 
 def custom_404_page(request, exception):
     return render(request, '404.html', status=404)
+
+
 
 

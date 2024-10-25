@@ -37,7 +37,7 @@
     </div>
     <div class="game-modal">
         <div class="content">
-            <img src="#" alt="gif">
+            <img src="{% static 'images/victory.gif' %}">
             <h4>Game Over!</h4> <br>
             <button class="play-again">Play Again</button><br>
 
@@ -54,7 +54,7 @@
     <div style="display: flex; justify-content: center;">
         <div class="container">
             <div class="hangman-box">
-                <img src="#" draggable="false" alt="hangman-img">
+                <img src="" draggable="false" alt="hangman-img">
                 <h1>Hangman Game</h1>
             </div>
             <div class="game-box">
@@ -131,7 +131,7 @@
                 const newScore = currentScore - 10;
                 scoreElement.innerText = `Score: ${newScore}`;
                 // Update the score on the server
-                fetch('update_score', {
+                fetch("{% url 'update_score' %}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -211,7 +211,7 @@
         playAgainBtn.addEventListener("click", () => {
             currentWordIndex = 0;
             resetGame();
-        }); 
+        });
   </script>
 
 </body>
