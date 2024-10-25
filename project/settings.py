@@ -140,7 +140,7 @@ if not DEBUG:
     X_FRAME_OPTIONS = 'DENY'
     SECURE_CONTENT_TYPE_NOSNIFF = True
 
-    CSRF_TRUSTED_ORIGINS = ['https://edutrack-lho0.onrender.com']
+    CSRF_TRUSTED_ORIGINS = ['https://nybb-go-2-0.onrender.com']
 else:
     CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost', 'https://choice-alien-saved.ngrok-free.app']
     
