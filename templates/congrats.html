@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Congrats</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'common.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+</head>
+<body>    
+    <a href="{% url 'index' %}"><img src="https://i.ibb.co/m6fWDL5/nybb-t.png" alt="NYBB Logo" class="logo"></a>
+    <h1>Genetic Odyssey</h1>
+    <h2 style="color: #e74c3c">Congratulations</h2>
+
+    <div style="text-align: center;">
+        <p>You have completed all the levels!</p>
+        <a href="{% url 'index' %}" class="button button-blue" style="display: inline-block;">Home</a>
+    </div>
+
+    <footer><span>&copy; 2024 | </span> <span><a href="#">NYBB - SUST</a></span></footer> 
+</body>
+</html>
+
+

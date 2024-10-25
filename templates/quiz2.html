@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Issue 2</title>
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'common.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <style>
+        .clue-2 a{
+            text-decoration: none;
+        }        
+    </style>
+</head>
+<body>
+    <a href="{% url 'index' %}"><img src="https://i.ibb.co/7SwXPgX/nybbt.jpg" alt="NYBB Logo" class="logo"></a>
+    <h1>Genetic Odyssey</h1>
+    <h2>Issue 2</h2>
+
+    {% if error_message %}
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            <strong>{{error_message}}</strong>
+        </div>  
+    {% endif %}
+
+    <div class="score-board">
+        <span>{{request.user}}</span>
+        <span>Score: {{request.user.team.score}}</span>
+    </div>
+
+    <div class="clue">
+        <div class="clue-1">
+            Unlocking the Laptop, a folder called MindCircuit contains a few notes. The note contains some information. 
+            “My findings are that. this disease is due to some mutation in a gene located in the autosome. 
+            It is an inherited disorder but somehow people of Luminescia are having their genes mutated and 
+            it is spreading to the next generation. As you have come this far, it is your duty to find out the 
+            reason for this and develop a cure for the people of Luminescia. I  fear someone is trying to stop our research. 
+            I've backed up my research and formed several clues. You need to find the location of the gene. I hope you can cure my people. Good luck.
+        </div>
+        <div class="clue-2">
+            <span><a href="https://drive.google.com/file/d/1oqq1tqI-d6YICBI6dArz4BT-05aI0Kun">unknown.txt</a></span>
+        </div>
+    </div><br>
+
+    <form action="{% url 'quiz2' %}" method="post"> {% csrf_token %}
+        <input type="text" name="UnlockKey" placeholder="Gene Location"> 
+        {% if request.user.team.quiz_2_status == False %}
+            <button type="submit" class="button button-green">Submit</button>
+        {% else %}
+            <button type="submit" class="button button-black" disabled>Submit</button>
+        {% endif %}
+    </form>
+
+    <div class="status">
+        {% if request.user.team.quiz_2_status == False %}
+            <span>Issue 2: Unsolved</span>
+        {% else %}
+            <span>Issue 2: Solved</span>
+            <a href="{% url 'quiz3' %}" class="button button-red">Issue 3</a>
+        {% endif %}
+    </div>
+
+    <footer><span>&copy; 2024 | </span> <span><a href="#">NYBB - SUST</a></span></footer>
+</body>
+</html>
+
+
+

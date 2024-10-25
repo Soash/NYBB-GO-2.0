@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Issue 6</title>
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'common.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <style>
+        td{
+            vertical-align: text-top;
+        }
+        td:first-child {
+            text-align: center;
+          }
+        .center img {
+            width: 30%; 
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        @media only screen and (max-width: 767px) {
+            .center img {
+                width: 100%;
+            }
+        }        
+    </style>
+</head>
+<body>
+    <a href="{% url 'index' %}"><img src="https://i.ibb.co/7SwXPgX/nybbt.jpg" alt="NYBB Logo" class="logo"></a>
+    <h1>Genetic Odyssey</h1>
+    <h2>Issue 6</h2>
+
+    {% if error_message %}
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            <strong>{{error_message}}</strong>
+        </div>  
+    {% endif %}
+
+    <div class="score-board">
+        <span>{{request.user}}</span>
+        <span>Score: {{request.user.team.score}}</span>
+    </div>
+
+    <div class="clue">
+        <div class=clue-1>
+            But the plot thickens. A DNA sample of a suspect falls into your hands, 
+            offering a chance to uncover the mastermind behind the chaos. Through DNA fingerprinting, 
+            can you decipher the identity of the culprit and bring an end to their sinister machinations?
+            Alert! Failed to indentify suspect will cost you -50 points. 
+        </div>
+        <div class="clue-1" style="text-align: left;">
+            <div class="center">
+                <img src="https://images.nagwa.com/figures/explainers/437104853457/7.svg">
+            </div>
+        </div>
+    </div><br>
+
+    <form action="{% url 'quiz6' %}" method="post"> {% csrf_token %}
+        <input type="text" name="UnlockKey" placeholder="Who? 1/2/3/4"> 
+        {% if request.user.team.quiz_6_status == False %}
+            <button type="submit" class="button button-green">Submit</button>
+        {% else %}
+            <button type="submit" class="button button-black" disabled>Submit</button>
+        {% endif %}
+    </form>
+
+    <div class="status">
+        {% if request.user.team.quiz_6_status == False %}
+            <span>Issue 6: Unsolved</span>
+        {% else %}
+            <span>Issue 6: Solved</span>
+            <a href="{% url 'congrats' %}" class="button button-green">End</a>
+        {% endif %}
+    </div>
+
+    <footer><span>&copy; 2024 | </span> <span><a href="#">NYBB - SUST</a></span></footer>
+</body>
+</html>
+
+

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Issue 5</title>
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'common.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <style>
+        td{
+            vertical-align: text-top;
+        }
+        td:first-child {
+            text-align: center;
+          }
+        .center img {
+            width: 30%; 
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .cw-clue{
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+        }
+        @media only screen and (max-width: 767px) {
+            .center img {
+                width: 100%;
+            }
+            .cw-clue{
+                flex-direction: column;
+                gap: 20px;
+            }
+        }        
+    </style>
+</head>
+<body>
+    <a href="{% url 'index' %}"><img src="https://i.ibb.co/7SwXPgX/nybbt.jpg" alt="NYBB Logo" class="logo"></a>
+    <h1>Genetic Odyssey</h1>
+    <h2>Issue 5</h2>
+
+    {% if error_message %}
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            <strong>{{error_message}}</strong>
+        </div>  
+    {% endif %}
+
+    <div class="score-board">
+        <span>{{request.user}}</span>
+        <span>Score: {{request.user.team.score}}</span>
+    </div>
+
+    <div class="clue">
+        <div class=clue-1>
+            As you delve deeper into the research, a pressing realization dawns upon you - the people of Luminescia need more than just a 
+            temporary fix. They require a permanent solution, one that gene therapy might provide. 
+            Your next task: procure a crucial material for this groundbreaking endeavor.
+        </div>
+        <div class="clue-1" style="text-align: left;">
+            <div class="center">
+                <img src="{% static 'cw.png' %}">
+            </div>
+
+            <div class="cw-clue">
+                <div>
+                    <b>Across:</b>
+                    <table>
+                        <tr><td>1.</td><td>Replicates only inside the living cells</td></tr>
+                        <tr><td>2.</td><td>Initial stage of development for multicellular organism</td></tr>
+                        <tr><td>3.</td><td>Basic building block of regenerative medicine</td></tr>
+                        <tr><td>4.</td><td>Process of copying genetic information from DNA to RNA</td></tr>
+                        <tr><td>5.</td><td>Functional unit of genetic regulation found in prokaryotic cells</td></tr>
+                        <tr><td>6.</td><td>Nucleic acid essential for protein synthesis</td></tr>
+                    </table>
+                </div>
+                <div>              
+                    <b>Down:</b>
+                    <table>
+                        <tr><td>7.</td><td>Cellular organelle where protein synthesis occurs</td></tr>
+                        <tr><td>8.</td><td>Genetic makeup determining individual characteristics</td></tr>
+                        <tr><td>9.</td><td>Enzyme breaking down proteins into amino acids</td></tr>
+                        <tr><td>10.</td><td>A specific characteristic of an individual</td></tr>
+                        <tr><td>11.</td><td>Unicellular organism</td></tr>
+                        <tr><td>12.</td><td>Technique amplifying specific DNA segments</td></tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="clue-2">
+            <span>Hint: Can be found in prokaryotes</span>
+        </div>
+    </div><br>
+
+    <form action="{% url 'quiz5' %}" method="post"> {% csrf_token %}
+        <input type="text" name="UnlockKey" placeholder="Unlock Key"> 
+        {% if request.user.team.quiz_5_status == False %}
+            <button type="submit" class="button button-green">Submit</button>
+        {% else %}
+            <button type="submit" class="button button-black" disabled>Submit</button>
+        {% endif %}
+    </form>
+
+    <div class="status">
+        {% if request.user.team.quiz_5_status == False %}
+            <span>Issue 5: Unsolved</span>
+        {% else %}
+            <span>Issue 5: Solved</span>
+            <a href="{% url 'quiz6' %}" class="button button-green">Issue 6</a>
+        {% endif %}
+    </div>
+
+    <footer><span>&copy; 2024 | </span> <span><a href="#">NYBB - SUST</a></span></footer>
+</body>
+</html>
+
+
+

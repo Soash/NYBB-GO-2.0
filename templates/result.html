@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'common.css' %}">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+</head>
+<body>
+    <a href="{% url 'index' %}"><img src="https://i.ibb.co/7SwXPgX/nybb.jpg" alt="NYBB Logo" class="logo"></a>
+    <h1>Genetic Odyssey</h1>
+    <h2>All Teams</h2>
+
+    <table id="teams">
+        <tr>
+            <th>Name</th>
+            <th>Score</th>
+            {% comment %} <th>Submission</th> {% endcomment %}
+            <th>Log</th>
+        </tr>
+        {% for team in teams %}
+            <tr>
+                <td>{{team.name}}</td>
+                <td>{{team.score}}</td>
+                {% comment %} <td>{{team.time}}</td> {% endcomment %}
+                <td>{{team.log|safe}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <footer><span>&copy; 2024 | </span> <span><a href="#">NYBB - SUST</a></span></footer>
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Issue 4</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'common.css' %}">
+    <link rel="stylesheet" href="{% static 'quiz4.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <script src="{% static 'word-list.js' %}"></script>
+    <style>
+         h1{margin: 20px;}
+        .score-board span{box-sizing:content-box;}
+    </style>
+</head>
+<body>
+    <a href="{% url 'index' %}"><img src="https://i.ibb.co/7SwXPgX/nybbt.jpg" alt="NYBB Logo" class="logo"></a>
+    <h1>Genetic Odyssey</h1>
+    <h2>Issue 4</h2>
+
+    <div class="score-board" style="margin: 20px 0px;">
+        <span>{{request.user}}</span>
+        <span>Score: {{request.user.team.score}}</span>
+    </div>
+
+    <div class="clue" style="margin: 20px;">
+        <div class="clue-1">
+            <b>Warning:</b> The culprits are attempting to deceive you with a dirty trick. 
+            They've arranged a Hangman game setup. Upon entering, your score is immediately decreased by 5. 
+            Reloading the page will result in a further deduction of 10 points. 
+            Failing to answer any of the six questions will result in a person's death, necessitating a restart.
+            Will you outsmart the traps laid before you and continue your quest unscathed?
+        </div>
+    </div>
+    <div class="game-modal">
+        <div class="content">
+            <img src="#" alt="gif">
+            <h4>Game Over!</h4> <br>
+            <button class="play-again">Play Again</button><br>
+
+            <form action="{% url 'quiz4' %}" method="post" class="click-me"> {% csrf_token %}
+                <input type="text" name="UnlockKey" placeholder="Unlock Key: 1953"> 
+                {% if request.user.team.quiz_4_status == False %}
+                    <button type="submit" class="button button-green">Submit</button>
+                {% else %}
+                    <button type="submit" class="button button-black" disabled>Submit</button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    <div style="display: flex; justify-content: center;">
+        <div class="container">
+            <div class="hangman-box">
+                <img src="#" draggable="false" alt="hangman-img">
+                <h1>Hangman Game</h1>
+            </div>
+            <div class="game-box">
+                <ul class="word-display"></ul>
+                <h4 class="hint-text">Hint <b></b></h4>
+                <h4 class="guesses-text">Incorrect guesses: <b></b></h4>
+                <div class="keyboard"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status">
+        {% if request.user.team.quiz_4_status == False %}
+            <span>Issue 4: Unsolved</span>
+        {% else %}
+            <span>Issue 4: Solved</span>
+            <a href="{% url 'quiz5' %}" class="button button-green">Issue 5</a>
+        {% endif %}
+    </div>
+
+    <footer><span>&copy; 2024 | </span> <span><a href="#">NYBB - SUST</a></span></footer>
+
+  <script>
+        // Define the URLs for images using Django template syntax
+        const hangmanImageURLs = [
+            "{% static 'images/hangman-0.svg' %}",
+            "{% static 'images/hangman-1.svg' %}",
+            "{% static 'images/hangman-2.svg' %}",
+            "{% static 'images/hangman-3.svg' %}",
+            "{% static 'images/hangman-4.svg' %}",
+            "{% static 'images/hangman-5.svg' %}",
+            "{% static 'images/hangman-6.svg' %}"
+        ];
+    
+        // Initialize other constants
+        const wordDisplay = document.querySelector(".word-display");
+        const guessesText = document.querySelector(".guesses-text b");
+        const keyboardDiv = document.querySelector(".keyboard");
+        const hangmanImage = document.querySelector(".hangman-box img");
+        const gameModal = document.querySelector(".game-modal");
+        const playAgainBtn = gameModal.querySelector("button");
+    
+        // Initializing game variables
+        let currentWordIndex = 0;
+        let correctLetters, wrongGuessCount;
+        const maxGuesses = 6;
+    
+        const resetGame = () => {
+            // Resetting game variables and UI elements
+            correctLetters = [];
+            wrongGuessCount = 0;
+            hangmanImage.src = hangmanImageURLs[0]; // Set initial hangman image
+            guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
+            const currentWord = wordList[currentWordIndex];
+            wordDisplay.innerHTML = currentWord.word.split("").map(() => `<li class="letter"></li>`).join("");
+            document.querySelector(".hint-text b").innerText = currentWord.hint;
+            keyboardDiv.querySelectorAll("button").forEach(btn => btn.disabled = false);
+            gameModal.classList.remove("show");
+        };
+    
+        const victoryImageURL = "{% static 'images/victory.gif' %}";
+        const lostImageURL = "{% static 'images/lost.gif' %}";
+    
+        const gameOver = (isVictory) => {
+            if (isVictory) {
+                gameModal.querySelector("img").src = victoryImageURL;
+                gameModal.querySelector("h4").innerText = 'Congrats! Key: 1953';
+            } else {
+                gameModal.querySelector("img").src = lostImageURL;
+                gameModal.querySelector("h4").innerText = 'Game Over!';
+                // Decrease the score by 10
+                const scoreElement = document.querySelector('.score-board span:nth-child(2)');
+                const currentScore = parseInt(scoreElement.innerText.split(': ')[1]);
+                const newScore = currentScore - 10;
+                scoreElement.innerText = `Score: ${newScore}`;
+                // Update the score on the server
+                fetch('update_score', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ newScore: newScore })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to decrease score');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle error here
+                });
+            }
+            gameModal.classList.add("show");
+            
+            if (isVictory) {
+                playAgainBtn.style.display = "none";
+                document.querySelector(".click-me").style.display = "flex";
+            } else {
+                playAgainBtn.style.display = "inline-block";
+                document.querySelector(".click-me").style.display = "none";
+            }
+        };
+    
+        const initGame = (button, clickedLetter) => {
+            // Checking if clickedLetter exists in the currentWord
+            const currentWord = wordList[currentWordIndex];
+            if (currentWord.word.includes(clickedLetter)) {
+                // Showing all correct letters on the word display
+                [...currentWord.word].forEach((letter, index) => {
+                    if (letter === clickedLetter) {
+                        correctLetters.push(letter);
+                        wordDisplay.querySelectorAll("li")[index].innerText = letter;
+                        wordDisplay.querySelectorAll("li")[index].classList.add("guessed");
+                    }
+                });
+            } else {
+                // If clicked letter doesn't exist then update the wrongGuessCount and hangman image
+                wrongGuessCount++;
+                hangmanImage.src = hangmanImageURLs[wrongGuessCount];
+            }
+            button.disabled = true; // Disable the clicked button so user can't click again
+            guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
+    
+            // Call gameOver function if any of these conditions are met
+            if (wrongGuessCount === maxGuesses) return gameOver(false);
+            if (correctLetters.length === currentWord.word.length) {
+                currentWordIndex++;
+                if (currentWordIndex < wordList.length) {
+                    resetGame();
+                } else {
+                    return gameOver(true);
+                }
+            }
+        };
+    
+        // Creating keyboard buttons and adding event listeners
+        for (let i = 97; i <= 122; i++) {
+            const button = document.createElement("button");
+            button.innerText = String.fromCharCode(i);
+            keyboardDiv.appendChild(button);
+            button.addEventListener("click", (e) => initGame(e.target, String.fromCharCode(i)));
+        }
+        for (let i = 48; i <= 57; i++) {
+            const button = document.createElement("button");
+            button.innerText = String.fromCharCode(i);
+            keyboardDiv.appendChild(button);
+            button.addEventListener("click", (e) => initGame(e.target, String.fromCharCode(i)));
+        }
+
+        // Initialize the game
+        resetGame(); 
+        playAgainBtn.addEventListener("click", () => {
+            currentWordIndex = 0;
+            resetGame();
+        }); 
+  </script>
+
+</body>
+</html>
+
+
+

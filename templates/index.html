@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'common.css' %}">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <style>
+        .status {
+            display: flex;
+            margin-top: 0px;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            flex-direction: row;
+        }
+        .div-1 {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'index' %}"><img src="https://i.ibb.co/7SwXPgX/nybb.jpg" alt="NYBB Logo" class="logo"></a>
+    <h1>Genetic Odyssey</h1>
+
+    <div style="display: flex; flex-direction: column; gap: 25px;">
+        <div class="score-board" style="margin-bottom:0px;">
+            <span>{{request.user}}</span>
+            <span>Score: {{request.user.team.score}}</span>
+        </div>
+        <div style="display: flex;justify-content: center;">
+            <div>{{request.user.team.log|safe}}</div>
+        </div>
+        <div class="status">
+            {% if request.user.team.quiz_1_status == True %}
+                <a href="{% url 'quiz1' %}" class="button button-green">Issue 1: <br> Solved</a>{% else %}
+                <a href="{% url 'quiz1' %}" class="button button-red">Issue 1: Unsolved</a>{% endif %}
+            {% if request.user.team.quiz_2_status == True %}
+                <a href="{% url 'quiz2' %}" class="button button-green">Issue 2: <br> Solved</a>{% else %}
+                <a href="{% url 'quiz2' %}" class="button button-red">Issue 2: Unsolved</a>{% endif %}
+            {% if request.user.team.quiz_3_status == True %}
+                <a href="{% url 'quiz3' %}" class="button button-green">Issue 3: <br> Solved</a>{% else %}
+                <a href="{% url 'quiz3' %}" class="button button-red">Issue 3: Unsolved</a>{% endif %}
+            {% if request.user.team.quiz_4_status == True %}
+                <a href="{% url 'quiz4' %}" class="button button-green">Issue 4: <br> Solved</a>{% else %}
+                <a href="{% url 'quiz4' %}" class="button button-red">Issue 4: Unsolved</a>{% endif %}
+            {% if request.user.team.quiz_5_status == True %}
+                <a href="{% url 'quiz5' %}" class="button button-green">Issue 5: <br> Solved</a>{% else %}
+                <a href="{% url 'quiz5' %}" class="button button-red">Issue 5: Unsolved</a>{% endif %}
+            {% if request.user.team.quiz_6_status == True %}
+                <a href="{% url 'quiz6' %}" class="button button-green">Issue 6: <br> Solved</a>{% else %}
+                <a href="{% url 'quiz6' %}" class="button button-red">Issue 6: Unsolved</a>{% endif %}
+        </div>
+        <div class="div-1">
+            <a href="{% url 'signin' %}" class="button button-blue">Sign In</a>
+            <a href="{% url 'signout' %}" class="button button-blue">Sign Out</a>
+        </div>    
+    </div>
+
+    <footer><span>&copy; 2024 | </span> <span><a href="#">NYBB - SUST</a></span></footer>
+
+</body>
+</html>

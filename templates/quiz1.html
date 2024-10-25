@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Issue 1</title>
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'common.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+</head>
+<body>
+    <a href="{% url 'index' %}"><img src="https://i.ibb.co/7SwXPgX/nybbt.jpg" alt="NYBB Logo" class="logo"></a>
+    <h1>Genetic Odyssey</h1>
+    <h2>Issue 1</h2>
+
+    {% if error_message %}
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            <strong>{{error_message}}</strong>
+        </div>  
+    {% endif %}
+
+    <div class="score-board">
+        <span>{{request.user}}</span>
+        <span>Score: {{request.user.team.score}}</span>
+    </div>
+
+    <div class="clue">
+        <div class="clue-1">
+            In the year 3024, you as a Biotechnologist, received a distress call from the distant planet Luminescia. 
+            Their inhabitants were grappling with a crisis stemming from an autosomal recessive disorder. Dr. Victor Frost had been 
+            diligently working on this affliction, primarily affecting the neurological health of the populace. Unfortunately, tragedy 
+            struck as Dr. Victor untimely passed away due to unknown circumstances.
+
+            You've been summoned to continue his crucial research, but there's a hurdle. His vital research data is locked within his
+            laptop, secured by a four-digit code. Before his demise, Dr. Victor left a cryptic clue, ensuring that only a worthy successor 
+            could carry on his work. The clue provided reads:
+        </div>
+        <div class="clue-2">
+            <span>GAC AAT GCA GAC GCA TAT</span>
+        </div>
+    </div><br>
+
+    <form action="{% url 'quiz1' %}" method="post"> {% csrf_token %}
+        <input type="number" name="UnlockKey" min="1000" max="9999" placeholder="C O D E">
+
+        {% if request.user.team.quiz_1_status == False %}
+            <button type="submit" class="button button-green">Submit</button>
+        {% else %}
+            <button type="submit" class="button button-black" disabled>Submit</button>
+        {% endif %}
+    </form>
+
+    <div class="status">
+        {% if request.user.team.quiz_1_status == False %}
+            <span>Issue 1: Unsolved</span>
+        {% else %}
+            <span>Issue 1: Solved</span>
+            <a href="{% url 'quiz2' %}" class="button button-red">Issue 2</a>
+        {% endif %}
+    </div>
+
+    <footer><span>&copy; 2024 | </span> <span><a href="#">NYBB - SUST</a></span></footer>
+</body>
+</html>
+
+
+
+
