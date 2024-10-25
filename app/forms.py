@@ -7,7 +7,7 @@ from django.core.mail import BadHeaderError
 from django.conf import settings
 
 def generate_random_password(length=8):
-    characters = string.ascii_letters + string.digits
+    characters = string.ascii_lowercase + string.digits
     return ''.join(random.choice(characters) for i in range(length))
 
 def generate_unique_username(first_name):
