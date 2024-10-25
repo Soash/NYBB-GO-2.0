@@ -28,7 +28,7 @@ class Team(models.Model):
         if self.start_time is None or self.end_time is None:
             return "Pending"
         duration = self.end_time - self.start_time
-        return f"{duration.total_seconds() / 60} minutes"
+        return f"{duration.total_seconds() / 60:.2f} minutes"
 
 
 
