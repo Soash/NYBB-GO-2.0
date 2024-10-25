@@ -4,7 +4,7 @@ from .models import Team
 
 
 class Team_display(admin.ModelAdmin):
-    list_display = ('name','score',)
+    list_display = ('name','start_time','score',)
 
 
 
