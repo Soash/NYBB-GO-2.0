@@ -15,11 +15,15 @@ def index(request):
 
 @login_required
 def quiz1(request):
+    team = request.user.team
+    if team.start_time is None:
+        team.start_time = timezone.now()
+        team.save()
+
     if request.method == 'POST':
         submitted_code = request.POST.get('UnlockKey')
         if submitted_code == '2504':
             if hasattr(request.user, 'team'):
-                team = request.user.team
                 if team.quiz_1_status == False:
                     team.score += 100 
                 team.quiz_1_status = True
@@ -129,7 +133,9 @@ def quiz6(request):
                         team.score += 100
                     team.quiz_6_status = True
                     team.log += f"Quiz 6 Solved at UTC {timezone.now().strftime('%Y-%m-%d %H:%M:%S')}<br>"
-                    team.time = timezone.now()
+                    if team.end_time is None:
+                        team.end_time = timezone.now()
+
                     team.save()
                     return redirect('congrats')
             else:
@@ -171,6 +177,8 @@ def update_score(request):
 
 
 def signin(request):
+    if request.user.is_authenticated:
+        return redirect('index')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('pass')
@@ -186,6 +194,8 @@ def signin(request):
     return render(request, 'signin.html')
 
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect('index')
     if request.method == 'POST':
         # print("ok")
         signup_form = SignUpForm(request.POST)
@@ -206,7 +216,7 @@ def signout(request):
     return redirect('signin')
 
 def result(request):
-    teams = Team.objects.all()
+    teams = Team.objects.all().order_by('-score')
     return render(request, 'result.html', {'teams': teams})
 
 def custom_404_page(request, exception):

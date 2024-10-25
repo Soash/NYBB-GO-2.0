@@ -59,7 +59,8 @@
                 <a href="{% url 'quiz6' %}" class="button button-red">Issue 6: Unsolved</a>{% endif %}
         </div>
         <div class="div-1">
-            <a href="{% url 'signin' %}" class="button button-blue">Sign In</a>
+            {% comment %} <a href="{% url 'signin' %}" class="button button-blue">Sign In</a> {% endcomment %}
+            <a href="{% url 'result' %}" class="button button-blue">Result</a>
             <a href="{% url 'signout' %}" class="button button-blue">Sign Out</a>
         </div>    
     </div>

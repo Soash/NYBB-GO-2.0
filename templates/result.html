@@ -18,14 +18,14 @@
         <tr>
             <th>Name</th>
             <th>Score</th>
-            {% comment %} <th>Submission</th> {% endcomment %}
+            <th>Duration</th>
             <th>Log</th>
         </tr>
         {% for team in teams %}
             <tr>
                 <td>{{team.name}}</td>
                 <td>{{team.score}}</td>
-                {% comment %} <td>{{team.time}}</td> {% endcomment %}
+                <td>{{team.duration}}</td>
                 <td>{{team.log|safe}}</td>
             </tr>
         {% endfor %}

@@ -15,12 +15,21 @@ class Team(models.Model):
     quiz_4_status = models.BooleanField(default=False)
     quiz_5_status = models.BooleanField(default=False)
     quiz_6_status = models.BooleanField(default=False)
-    time = models.DateTimeField(default=timezone.now)
+    start_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    log = models.TextField(default="")
+    log = models.TextField(default="", null=True, blank=True)
 
     def __str__(self):
         return f"Team: {self.name}"
+    
+    @property
+    def duration(self):
+        if self.start_time is None or self.end_time is None:
+            return "Pending"
+        duration = self.end_time - self.start_time
+        return f"{duration.total_seconds() / 60} minutes"
+
 
 
 
