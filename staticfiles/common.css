@@ -51,8 +51,9 @@ h2 {
 .score-board {
     display: flex;
     justify-content: center;
-    gap: 100px;
+    gap: 10px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 .score-board span {

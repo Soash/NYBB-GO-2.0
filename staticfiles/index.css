@@ -12,7 +12,7 @@ h1, h2{
 #teams td, #teams th {
     border: 1px solid #ddd;
     padding: 10px;
-    width: calc(100% / 3);
+    width: calc(100% / 4);
 }
 #teams tr:nth-child(even){background-color: #f2f2f2;}
 #teams th {
