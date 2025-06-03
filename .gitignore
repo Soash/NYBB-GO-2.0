@@ -1,6 +1,6 @@
 venv/
-tutorial.txt
 .env
-info.txt
-solution.txt
 db.sqlite3
+__pycache__/
+*.pyc
+

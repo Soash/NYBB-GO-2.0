@@ -77,10 +77,10 @@ DATABASES = {
     }
 }
 
-DATABASE_URL = env('DATABASE_URL')
-DATABASES = {
-    'default': dj_database_url.config(default=DATABASE_URL)
-}
+# DATABASE_URL = env('DATABASE_URL')
+# DATABASES = {
+#     'default': dj_database_url.config(default=DATABASE_URL)
+# }
 
 
 # Password validation
@@ -152,3 +152,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'glitch.guardian.01@gmail.com'
+
+
