@@ -41,18 +41,50 @@ class SignUpForm(forms.ModelForm):
         user.username = generate_unique_username(user.first_name)
         password = generate_random_password()
         user.set_password(password)
+        temp_pw = password
 
         # Inside your save() method:
         if commit:
             user.save()
             try:
-                send_mail(
-                    'Your account credentials',
-                    f'Welcome to NYBB Go!\nUsername: {user.username}\nPassword: {password}',
-                    settings.DEFAULT_FROM_EMAIL,
-                    [self.cleaned_data.get('email')],
-                    fail_silently=False,
-                )
+                # send_mail(
+                #     'Your account credentials',
+                #     f'Welcome to NYBB Go!\nUsername: {user.username}\nPassword: {password}',
+                #     settings.DEFAULT_FROM_EMAIL,
+                #     [self.cleaned_data.get('email')],
+                #     fail_silently=False,
+                # )
+                
+                import smtplib
+                from email.message import EmailMessage
+
+                # Email credentials
+                username = settings.DEFAULT_FROM_EMAIL
+                password = settings.EMAIL_HOST_PASSWORD # Replace with the actual password
+
+                # Email content
+                msg = EmailMessage()
+                msg['Subject'] = 'Your account credentials'
+                msg['From'] = username
+                msg['To'] = self.cleaned_data.get('email')
+                msg.set_content(f'Welcome to NYBB Go!\nUsername: {user.username}\nPassword: {temp_pw}')
+
+                # SMTP server configuration
+                smtp_server = 'mail.soash.xyz'
+                smtp_port = 465  # SSL port
+
+                # Send the email
+                try:
+                    with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
+                        server.login(username, password)
+                        server.send_message(msg)
+                        print('Email sent successfully!')
+                except Exception as e:
+                    print(f'Failed to send email: {e}')
+                
+                
+                
+                
                 logger.info(f"Email successfully sent to {self.cleaned_data.get('email')} for user {user.username}")
             except BadHeaderError:
                 logger.error("Invalid header found while sending email.")
