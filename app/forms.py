@@ -6,6 +6,12 @@ from django.core.mail import send_mail
 from django.core.mail import BadHeaderError
 from django.conf import settings
 
+import logging
+import traceback
+
+logger = logging.getLogger(__name__)
+
+
 def generate_random_password(length=8):
     characters = string.ascii_lowercase + string.digits
     return ''.join(random.choice(characters) for i in range(length))
@@ -36,6 +42,7 @@ class SignUpForm(forms.ModelForm):
         password = generate_random_password()
         user.set_password(password)
 
+        # Inside your save() method:
         if commit:
             user.save()
             try:
@@ -46,10 +53,11 @@ class SignUpForm(forms.ModelForm):
                     [self.cleaned_data.get('email')],
                     fail_silently=False,
                 )
+                logger.info(f"Email successfully sent to {self.cleaned_data.get('email')} for user {user.username}")
             except BadHeaderError:
-                print("Invalid header found. Email not sent.")
+                logger.error("Invalid header found while sending email.")
             except Exception as e:
-                print(f"An error occurred: {e}. Email not sent.")
-        return user
+                logger.error("An error occurred while sending email:")
+                logger.error(traceback.format_exc())
 
 
