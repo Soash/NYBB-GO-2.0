@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.core.mail import BadHeaderError
 from django.conf import settings
-
+import smtplib
+from email.message import EmailMessage
 import logging
 import traceback
 
@@ -40,8 +41,9 @@ class SignUpForm(forms.ModelForm):
 
         user.username = generate_unique_username(user.first_name)
         password = generate_random_password()
-        user.set_password(password)
         temp_pw = password
+        user.set_password(password)
+        
 
         # Inside your save() method:
         if commit:
@@ -55,8 +57,7 @@ class SignUpForm(forms.ModelForm):
                 #     fail_silently=False,
                 # )
                 
-                import smtplib
-                from email.message import EmailMessage
+               
 
                 # Email credentials
                 username = settings.DEFAULT_FROM_EMAIL
